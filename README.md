@@ -1,4 +1,4 @@
-# Node Project for 1M rps
+# Node Project for 1M RPS
 
 This repository is used as an example for Handling 1 Million Requests per Second.
 
