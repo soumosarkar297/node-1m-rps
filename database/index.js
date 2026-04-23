@@ -21,18 +21,21 @@ export const pool = shouldConnect
     })
   : null;
 
-if (shouldConnect) {
-  pool.query("SELECT NOW()", (err, res) => {
-    if (err) {
-      console.error("[postgres] connection failed.");
-      console.error("Error details:\n", err);
-      process.exit(1);
-    } else {
-      console.log(
-        "[postgres] connected successfully to " + keys.dbDatabase + ".",
-      );
+async function initDB() {
+  while (true) {
+    try {
+      await pool.query("SELECT NOW()");
+      console.log("[postgres] connected successfully to " + keys.dbDatabase);
+      break;
+    } catch (err) {
+      console.error("[postgres] connection failed. Retrying...");
+      await new Promise((r) => setTimeout(r, 2000));
     }
-  });
+  }
+}
+
+if (shouldConnect) {
+  await initDB();
 }
 
 // For any general query
